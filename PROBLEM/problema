@@ -1,0 +1,139 @@
+(define (problem movimientos-practica2)
+  (:domain movimientos-tierra)
+
+  (:objects
+    avion1 avion2 avion3 avion4 avion5 avion6 - aircraft
+    tractor1 tractor2 - tractor
+
+    pista-aterrizaje1 pista-aterrizaje2 - pista-aterrizaje
+    pista-rodaje1 pista-rodaje2 pista-rodaje3 - pista-rodaje
+
+    terminal1 terminal2 terminal3 - terminal
+
+    finger1 finger2 finger3 finger4 - finger
+
+    cargador1 cargador2 cargador3 - cargador
+  )
+
+  (:init
+    ;; aviones
+    (at-aircraft avion1 pista-aterrizaje1)
+    (at-aircraft avion2 pista-aterrizaje2)
+    (at-aircraft avion3 finger1)
+    (at-aircraft avion4 finger2)
+    (at-aircraft avion5 finger3)
+    (at-aircraft avion6 finger4)
+
+    ;; tractores
+    (at-tractor tractor1 terminal2)
+    (at-tractor tractor2 pista-rodaje2)
+
+    ;; fingers en terminales
+    (in finger1 terminal1)
+    (in finger2 terminal2)
+    (in finger3 terminal3)
+    (in finger4 terminal3)
+
+    ;; fingers
+    (occupied-finger finger1)
+    (occupied-finger finger2)
+    (occupied-finger finger3)
+    (occupied-finger finger4)
+
+    ;; cargadores
+    (in-cargador cargador1 terminal1)
+    (in-cargador cargador2 terminal2)
+    (in-cargador cargador3 terminal3)
+
+    (free-cargador cargador1)
+    (free-cargador cargador2)
+    (free-cargador cargador3)
+
+    ;; cargas/velocidades/tiempos
+    (= (carga-restante tractor1) 4)
+    (= (carga-restante tractor2) 2)
+    (= (duracion-carga tractor1) 10)
+    (= (duracion-carga tractor2) 14)
+
+    (= (aircraft-speed avion1) 2)
+    (= (aircraft-speed avion2) 2)
+    (= (aircraft-speed avion3) 4)
+    (= (aircraft-speed avion4) 4)
+    (= (aircraft-speed avion5) 2)
+    (= (aircraft-speed avion6) 2)
+
+    (= (tractor-speed tractor1) 1)
+    (= (tractor-speed tractor2) 1)
+
+    ;; distancias
+    (= (distance pista-aterrizaje1 pista-rodaje1) 8)
+    (= (distance pista-rodaje1 pista-aterrizaje1) 8)
+    (= (distance pista-aterrizaje1 pista-rodaje2) 12)
+    (= (distance pista-rodaje2 pista-aterrizaje1) 12)
+    (= (distance pista-aterrizaje2 pista-rodaje1) 16)
+    (= (distance pista-rodaje1 pista-aterrizaje2) 16)
+    (= (distance pista-aterrizaje2 pista-rodaje3) 8)
+    (= (distance pista-rodaje3 pista-aterrizaje2) 8)
+    (= (distance pista-rodaje1 pista-rodaje2) 8)
+    (= (distance pista-rodaje2 pista-rodaje1) 8)
+    (= (distance pista-rodaje2 pista-rodaje3) 4)
+    (= (distance pista-rodaje3 pista-rodaje2) 4)
+    (= (distance pista-rodaje1 terminal1) 20)
+    (= (distance terminal1 pista-rodaje1) 20)
+    (= (distance pista-rodaje1 terminal2) 20)
+    (= (distance terminal2 pista-rodaje1) 20)
+    (= (distance pista-rodaje1 terminal3) 24)
+    (= (distance terminal3 pista-rodaje1) 24)
+    (= (distance pista-rodaje2 terminal2) 12)
+    (= (distance terminal2 pista-rodaje2) 12)
+    (= (distance pista-rodaje2 terminal3) 12)
+    (= (distance terminal3 pista-rodaje2) 12)
+    (= (distance pista-rodaje3 terminal3) 20)
+    (= (distance terminal3 pista-rodaje3) 20)
+
+    ;; conexiones
+    (connected pista-rodaje1 pista-aterrizaje1)
+    (connected pista-aterrizaje1 pista-rodaje1)
+    (connected pista-rodaje2 pista-aterrizaje1)
+    (connected pista-aterrizaje1 pista-rodaje2)
+    (connected pista-rodaje1 pista-aterrizaje2)
+    (connected pista-aterrizaje2 pista-rodaje1)
+    (connected pista-rodaje3 pista-aterrizaje2)
+    (connected pista-aterrizaje2 pista-rodaje3)
+
+    (connected pista-rodaje1 pista-rodaje2)
+    (connected pista-rodaje2 pista-rodaje1)
+    (connected pista-rodaje2 pista-rodaje3)
+    (connected pista-rodaje3 pista-rodaje2)
+
+    (connected pista-rodaje1 terminal1)
+    (connected terminal1  pista-rodaje1)
+    (connected pista-rodaje1 terminal2)
+    (connected terminal2  pista-rodaje1)
+    (connected pista-rodaje1 terminal3)
+    (connected terminal3  pista-rodaje1)
+    (connected pista-rodaje2 terminal2)
+    (connected terminal2  pista-rodaje2)
+    (connected pista-rodaje2 terminal3)
+    (connected terminal3  pista-rodaje2)
+    (connected pista-rodaje3 terminal3)
+    (connected terminal3  pista-rodaje3)
+
+    (= (numero-recargas) 0)
+    (= (deploy-finger-time) 2)
+    (= (retrieve-finger-time) 2)
+  )
+
+  (:goal
+    (and
+      (at-aircraft avion1 finger1)
+      (at-aircraft avion2 finger3)
+      (at-aircraft avion3 pista-aterrizaje1)
+      (at-aircraft avion4 pista-aterrizaje2)
+      (at-aircraft avion5 pista-aterrizaje2)
+      (at-aircraft avion6 pista-aterrizaje1)
+    )
+  )
+
+  (:metric minimize (+ (* 0.5 (total-time)) (* 10 (numero-recargas))))
+)
